@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
  *
  * @author user1
  */
-public class DSGorup2Suzume 
+public class PixelMap
 {
 
     /**
