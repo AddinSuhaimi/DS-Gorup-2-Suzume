@@ -46,6 +46,7 @@ public class WildTicTacToe extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
         currentPlayer = "1";
+        System.out.println("Current Player: 1");
         board = new JButton[3][3];
         hasWinner = false;
         initializeBoard();
@@ -81,6 +82,7 @@ public class WildTicTacToe extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 currentSign = "x";
+                System.out.println("Selected Sign: X");
             }
         });
         
@@ -90,6 +92,7 @@ public class WildTicTacToe extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 currentSign = "o";
+                System.out.println("Selected Sign: O");
             }
         });
         
