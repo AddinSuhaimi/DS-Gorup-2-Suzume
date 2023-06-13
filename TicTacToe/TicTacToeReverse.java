@@ -128,6 +128,12 @@ public class TicTacToeReverse extends JFrame {
         // Check diagonal
         if (checkCombination(board[0][0], board[1][1], board[2][2]) || checkCombination(board[2][0], board[1][1], board[0][2]))
             return;
+
+        // Check for draw
+        if(isBoardFull()){
+            JOptionPane.showMessageDialog(null, "Draw!");
+            hasWinner = true;
+        }
     }
     
     private boolean checkCombination(JButton button1, JButton button2, JButton button3) {
@@ -141,4 +147,14 @@ public class TicTacToeReverse extends JFrame {
     }
     return false;
 }
+    private boolean isBoardFull() {
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                if(board[i][j].getText().equals("")) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
