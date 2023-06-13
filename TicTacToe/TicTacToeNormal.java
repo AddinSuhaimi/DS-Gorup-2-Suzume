@@ -144,6 +144,11 @@ public class TicTacToeNormal extends JFrame {
             }
         }
     }
+    // Check for draw
+        if(isBoardFull()){
+            JOptionPane.showMessageDialog(null, "Draw!");
+            hasWinner = true;
+    }
     }
     
     private boolean checkCombination(JButton button1, JButton button2, JButton button3) {
@@ -155,4 +160,15 @@ public class TicTacToeNormal extends JFrame {
     }
     return false;
 }
+
+    private boolean isBoardFull() {
+    for(int i = 0; i < 5; i++) {
+        for(int j = 0; j < 5; j++) {
+            if(board[i][j].getText().equals("")) {
+                return false;
+            }
+        }
+    }
+    return true;
+    }
 }
