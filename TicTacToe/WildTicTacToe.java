@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package wildtictactoe;
+package tictactoe;
 
 import java.awt.Container;
 import java.awt.Font;
@@ -25,12 +25,12 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 public class WildTicTacToe extends JFrame {
     private Container pane;
     private String currentPlayer;
-    private String currentSign;
+    private String currentSymbol;
     private JButton [][] board;
     private boolean hasWinner;
     private JMenuBar menuBar;
     private JMenu menu;
-    private JMenu sign;
+    private JMenu symbol;
     private JMenuItem quit;
     private JMenuItem newGame;
     private JMenuItem x;
@@ -40,7 +40,7 @@ public class WildTicTacToe extends JFrame {
         super();
         pane = getContentPane();
         pane.setLayout(new GridLayout(3,3));
-        setTitle("Tic Tac Toe");
+        setTitle("Wild Tic Tac Toe PVP");
         setSize(500,500);
         setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -55,8 +55,8 @@ public class WildTicTacToe extends JFrame {
      
     private void initializeMenuBar(){
         menuBar = new JMenuBar();
-        menu = new JMenu("File");
-        sign = new JMenu("Sign");
+        menu = new JMenu("Menu");
+        symbol = new JMenu("Symbol");
         
         newGame = new JMenuItem("New Game");
         newGame.addActionListener(new ActionListener(){
@@ -81,8 +81,8 @@ public class WildTicTacToe extends JFrame {
         
             @Override
             public void actionPerformed(ActionEvent e){
-                currentSign = "x";
-                System.out.println("Selected Sign: X");
+                currentSymbol = "x";
+                System.out.println("Selected Symbol: X");
             }
         });
         
@@ -91,22 +91,22 @@ public class WildTicTacToe extends JFrame {
         
             @Override
             public void actionPerformed(ActionEvent e){
-                currentSign = "o";
-                System.out.println("Selected Sign: O");
+                currentSymbol = "o";
+                System.out.println("Selected Symbol: O");
             }
         });
         
         menu.add(newGame);
         menu.add(quit);
-        sign.add(x);
-        sign.add(o);
+        symbol.add(x);
+        symbol.add(o);
         menuBar.add(menu);
-        menuBar.add(sign);
+        menuBar.add(symbol);
         setJMenuBar(menuBar);
     }
     private void resetBoard(){
         currentPlayer = "1";
-        currentSign = null;
+        currentSymbol = null;
         hasWinner = false;
         for(int i = 0; i <3; i++){
             for(int j = 0; j < 3; j++){
@@ -125,10 +125,10 @@ public class WildTicTacToe extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e){
                         if(((JButton)e.getSource()).getText().equals("") && hasWinner == false){
-                            if(currentSign == null) {
-                                JOptionPane.showMessageDialog(null, "Choose a sign first!");
+                            if(currentSymbol == null) {
+                                JOptionPane.showMessageDialog(null, "Choose a symbol first!");
                             } else {
-                                btn.setText(currentSign);
+                                btn.setText(currentSymbol);
                                 hasWinner();
                                 togglePlayer();
                             }
