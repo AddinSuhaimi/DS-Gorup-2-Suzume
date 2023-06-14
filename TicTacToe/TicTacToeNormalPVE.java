@@ -279,12 +279,13 @@ public class TicTacToeNormalPVE extends JFrame {
     }
     
     //checks if there is a winning move available for both the human player and AI in the "Hard" difficulty
-    //allows the AI to win if there is an opportunity and blocks the human player from winning
+    //allows the AI to win if there is an opportunity first 
+    //if no opportunity to win, it tries to block the human player from winning
     private JButton makeHardMove() {
-        if(checkWinningMove("x")) {
+        if(checkWinningMove("o")) {
             return board[rowCheck][colCheck];
         }
-        if(checkWinningMove("o")) {
+        if(checkWinningMove("x")) {
             return board[rowCheck][colCheck];
         }
         return makeEasyMove();
