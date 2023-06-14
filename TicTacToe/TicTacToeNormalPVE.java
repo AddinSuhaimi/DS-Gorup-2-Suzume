@@ -347,8 +347,8 @@ public class TicTacToeNormalPVE extends JFrame {
         }
 
         // Check diagonals
-        for (int i = 0; i <= 1; i++) {
-            for (int j = 0; j <= 1; j++) {
+        for (int i = 0; i <= 2; i++) {
+            for (int j = 0; j <= 2; j++) {
                 if (board[i][j].getText().equals(symbol) && 
                     board[i + 1][j + 1].getText().equals(symbol) && 
                     board[i + 2][j + 2].getText().equals("")) {
@@ -373,27 +373,27 @@ public class TicTacToeNormalPVE extends JFrame {
             }
         }
 
-        for (int i = 2; i <= 3; i++) {
-            for (int j = 3; j >= 2; j--) {
-                if (board[i][j - 2].getText().equals(symbol) && 
-                    board[i - 1][j - 1].getText().equals(symbol) && 
-                    board[i - 2][j].getText().equals("")) {
-                    rowCheck = i-2;
-                    colCheck = j;
+        for (int i = 0; i <= 2; i++) {
+            for (int j = 4; j >= 2; j--) {
+                if (board[i][j].getText().equals(symbol) && 
+                    board[i + 1][j - 1].getText().equals(symbol) && 
+                    board[i + 2][j - 2].getText().equals("")) {
+                    rowCheck = i+2;
+                    colCheck = j-2;
                     return true;
                 }
-                if (board[i][j - 2].getText().equals(symbol) && 
-                    board[i - 1][j - 1].getText().equals("") && 
-                    board[i - 2][j].getText().equals(symbol)) {
-                    rowCheck = i-1;
+                if (board[i][j].getText().equals(symbol) && 
+                    board[i + 1][j - 1].getText().equals("") && 
+                    board[i + 2][j - 2].getText().equals(symbol)) {
+                    rowCheck = i+1;
                     colCheck = j-1;
                     return true;
                 }
-                if (board[i][j - 2].getText().equals("") && 
-                    board[i - 1][j - 1].getText().equals(symbol) && 
-                    board[i - 2][j].getText().equals(symbol)) {
+                if (board[i][j].getText().equals("") && 
+                    board[i + 1][j - 1].getText().equals(symbol) && 
+                    board[i + 2][j - 2].getText().equals(symbol)) {
                     rowCheck = i;
-                    colCheck = j-2;
+                    colCheck = j;
                     return true;
                 }
             }
