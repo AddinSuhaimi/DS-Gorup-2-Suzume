@@ -93,7 +93,14 @@ public class TicTacToeNormal extends JFrame {
                     public void actionPerformed(ActionEvent e){
                         if(((JButton)e.getSource()).getText().equals("") && hasWinner == false){
                             btn.setText(currentPlayer);
-                            hasWinner();
+                            if(hasWinner()) {
+                                JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won");
+                                hasWinner = true;
+                            }
+                            if(isBoardFull()) {
+                                JOptionPane.showMessageDialog(null, "Draw!");
+                                hasWinner = true;
+                            }
                             togglePlayer();
                         }
                     }
@@ -109,46 +116,46 @@ public class TicTacToeNormal extends JFrame {
             currentPlayer = "x";
     }
 
-    private void hasWinner() {
-    // Check rows
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j <= 2; j++) {
-            if (checkCombination(board[i][j], board[i][j+1], board[i][j+2])) {
-                return;
+    private boolean hasWinner() {
+        // Check rows
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j <= 2; j++) {
+                if (checkCombination(board[i][j], board[i][j+1], board[i][j+2])) {
+                    return true;
+                }
             }
         }
-    }
 
-    // Check columns
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j <= 2; j++) {
-            if (checkCombination(board[j][i], board[j+1][i], board[j+2][i])) {
-                return;
+        // Check columns
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j <= 2; j++) {
+                if (checkCombination(board[j][i], board[j+1][i], board[j+2][i])) {
+                    return true;
+                }
             }
         }
-    }
 
-    // Check diagonals
-    for (int i = 0; i <= 2; i++) {
-        for (int j = 0; j <= 2; j++){
-            if (checkCombination(board[i][j], board[i+1][j+1], board[i+2][j+2])) {
-                return;
+        // Check diagonals
+        for (int i = 0; i <= 2; i++) {
+            for (int j = 0; j <= 2; j++){
+                if (checkCombination(board[i][j], board[i+1][j+1], board[i+2][j+2])) {
+                    return true;
+                }
             }
         }
-    }
 
-    for (int i = 2; i <= 4; i++) {
-        for (int j = 4; j >= 2; j--){
-            if (checkCombination(board[i][j-2], board[i-1][j-1], board[i-2][j])) {
-                return;
+        for (int i = 2; i <= 4; i++) {
+            for (int j = 4; j >= 2; j--){
+                if (checkCombination(board[i][j-2], board[i-1][j-1], board[i-2][j])) {
+                    return true;
+                }
             }
         }
-    }
-    // Check for draw
-        if(isBoardFull()){
-            JOptionPane.showMessageDialog(null, "Draw!");
-            hasWinner = true;
-    }
+        // Check for draw
+            if(isBoardFull()){
+                return false;
+        }
+        return false;
     }
     
     private boolean checkCombination(JButton button1, JButton button2, JButton button3) {
