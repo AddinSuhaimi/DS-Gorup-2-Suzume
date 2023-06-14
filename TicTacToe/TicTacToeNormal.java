@@ -96,7 +96,7 @@ public class TicTacToeNormal extends JFrame {
                             if(hasWinner()) {
                                 JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won");
                                 hasWinner = true;
-                            }
+                            } else
                             if(isBoardFull()) {
                                 JOptionPane.showMessageDialog(null, "Draw!");
                                 hasWinner = true;
