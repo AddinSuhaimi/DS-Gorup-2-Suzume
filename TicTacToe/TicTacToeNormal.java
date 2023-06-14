@@ -48,7 +48,7 @@ public class TicTacToeNormal extends JFrame {
      
     private void initializeMenuBar(){
         menuBar = new JMenuBar();
-        menu = new JMenu("File");
+        menu = new JMenu("Menu");
         
         newGame = new JMenuItem("New Game");
         newGame.addActionListener(new ActionListener(){
