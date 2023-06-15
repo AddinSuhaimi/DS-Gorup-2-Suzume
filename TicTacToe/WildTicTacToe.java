@@ -20,7 +20,7 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
  *
- * @author Idlan
+ * @author Idlan & Addin
  */
 public class WildTicTacToe extends JFrame {
     private Container pane;
@@ -35,6 +35,7 @@ public class WildTicTacToe extends JFrame {
     private JMenuItem newGame;
     private JMenuItem x;
     private JMenuItem o;
+    private ArrayList<int[]> moveHistory;
     
     public WildTicTacToe(){
         super();
@@ -49,6 +50,7 @@ public class WildTicTacToe extends JFrame {
         System.out.println("Current Player: 1");
         board = new JButton[3][3];
         hasWinner = false;
+        moveHistory = new ArrayList<>();
         initializeBoard();
         initializeMenuBar();
     }
@@ -96,8 +98,17 @@ public class WildTicTacToe extends JFrame {
             }
         });
         
+        JMenuItem undo = new JMenuItem("Undo");
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                undoMove();
+            }
+        });
+        
         menu.add(newGame);
         menu.add(quit);
+        menu.add(undo);
         symbol.add(x);
         symbol.add(o);
         menuBar.add(menu);
@@ -120,6 +131,7 @@ public class WildTicTacToe extends JFrame {
                 JButton btn = new JButton();
                 btn.setFont(new Font(Font.SANS_SERIF,Font.BOLD,100));
                 board[i][j] = btn;
+                int[] move = {i, j}; // Store the move coordinates
                 btn.addActionListener(new ActionListener(){
                     
                     @Override
@@ -128,6 +140,7 @@ public class WildTicTacToe extends JFrame {
                             if(currentSymbol == null) {
                                 JOptionPane.showMessageDialog(null, "Choose a symbol first!");
                             } else {
+                                moveHistory.add(move); // Add the move to the history
                                 btn.setText(currentSymbol);
                                 if(hasWinner()) {
                                     JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " wins!");
@@ -207,5 +220,15 @@ public class WildTicTacToe extends JFrame {
             }
         }
         return true;
+    }
+    
+    private void undoMove() {
+        if (!moveHistory.isEmpty() && !hasWinner) {
+            int[] lastMove = moveHistory.remove(moveHistory.size() - 1);
+            int row = lastMove[0];
+            int col = lastMove[1];
+            board[row][col].setText("");
+            togglePlayer();
+        }
     }
 }
