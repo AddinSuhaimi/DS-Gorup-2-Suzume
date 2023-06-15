@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -19,7 +20,7 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
  *
- * @author Idlan
+ * @author Idlan & Addin
  */
 public class TicTacToeReverse extends JFrame {
     private Container pane;
@@ -30,6 +31,7 @@ public class TicTacToeReverse extends JFrame {
     private JMenu menu;
     private JMenuItem quit;
     private JMenuItem newGame;
+    private ArrayList<int[]> moveHistory;
     
     public TicTacToeReverse(){
         super();
@@ -42,6 +44,7 @@ public class TicTacToeReverse extends JFrame {
         setVisible(true);
         currentPlayer = "x";
         board = new JButton[3][3];
+        moveHistory = new ArrayList<>();
         hasWinner = false;
         initializeBoard();
         initializeMenuBar();
@@ -66,10 +69,20 @@ public class TicTacToeReverse extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 System.exit(0);
-        }
-    });
+            }
+        });
+        
+        JMenuItem undo = new JMenuItem("Undo");
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                undoMove();
+            }
+        });
+        
         menu.add(newGame);
         menu.add(quit);
+        menu.add(undo);
         menuBar.add(menu);
         setJMenuBar(menuBar);
     }
@@ -80,7 +93,7 @@ public class TicTacToeReverse extends JFrame {
             for(int j = 0; j < 3; j++){
                 board[i][j].setText("");
             }
-    }
+        }
     }
     private void initializeBoard(){
         for (int i = 0; i<3; i++){
@@ -88,13 +101,22 @@ public class TicTacToeReverse extends JFrame {
                 JButton btn = new JButton();
                 btn.setFont(new Font(Font.SANS_SERIF,Font.BOLD,100));
                 board[i][j] = btn;
+                int[] move = {i, j}; // Store the move coordinates
                 btn.addActionListener(new ActionListener(){
                     
                     @Override
                     public void actionPerformed(ActionEvent e){
                         if(((JButton)e.getSource()).getText().equals("") && hasWinner == false){
                             btn.setText(currentPlayer);
-                            hasWinner();
+                            moveHistory.add(move); // Add the move to the history
+                            if(hasWinner()) {
+                                JOptionPane.showMessageDialog(null, "Player " + (currentPlayer.equals("x") ? "o" : "x") + " has won");
+                                hasWinner = true;
+                            } else
+                            if(isBoardFull()) {
+                                JOptionPane.showMessageDialog(null, "Draw!");
+                                hasWinner = true;
+                            }
                             togglePlayer();
                         }
                     }
@@ -110,43 +132,41 @@ public class TicTacToeReverse extends JFrame {
             currentPlayer = "x";
     }
     
-    private void hasWinner() {
+    private boolean hasWinner() {
         // Check rows
         for (int i = 0; i < 3; i++) {
             if (checkCombination(board[i][0], board[i][1], board[i][2])) {
-                return;
+                return true;
             }
         }
 
         // Check columns
         for (int i = 0; i < 3; i++) {
             if (checkCombination(board[0][i], board[1][i], board[2][i])) {
-                return;
+                return true;
             }
         }
 
         // Check diagonal
         if (checkCombination(board[0][0], board[1][1], board[2][2]) || checkCombination(board[2][0], board[1][1], board[0][2]))
-            return;
+            return true;
 
         // Check for draw
         if(isBoardFull()){
-            JOptionPane.showMessageDialog(null, "Draw!");
-            hasWinner = true;
+            return false;
         }
+        return false;
     }
     
     private boolean checkCombination(JButton button1, JButton button2, JButton button3) {
-    String text = button1.getText();
-    String reverse = currentPlayer.equals("x") ? "o" : "x";
-    
-    if (!text.equals("") && text.equals(button2.getText()) && text.equals(button3.getText())) {
-        JOptionPane.showMessageDialog(null, "Player " + reverse + " has won");
-        hasWinner = true;
-        return true;
+        String text = button1.getText();
+        String reverse = currentPlayer.equals("x") ? "o" : "x";
+
+        if (!text.equals("") && text.equals(button2.getText()) && text.equals(button3.getText())) {
+            return true;
+        }
+        return false;
     }
-    return false;
-}
     private boolean isBoardFull() {
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
@@ -156,5 +176,15 @@ public class TicTacToeReverse extends JFrame {
             }
         }
         return true;
+    }
+    
+    private void undoMove() {
+        if (!moveHistory.isEmpty() && !hasWinner) {
+            int[] lastMove = moveHistory.remove(moveHistory.size() - 1);
+            int row = lastMove[0];
+            int col = lastMove[1];
+            board[row][col].setText("");
+            togglePlayer();
+        }
     }
 }
