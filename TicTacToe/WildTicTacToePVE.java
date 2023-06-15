@@ -21,7 +21,7 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
  *
- * @author Idlan
+ * @author Idlan & Addin
  */
 public class WildTicTacToePVE extends JFrame {
     private Container pane;
@@ -44,6 +44,7 @@ public class WildTicTacToePVE extends JFrame {
     private JMenuItem hard;
     private int rowCheck;
     private int colCheck;
+    private ArrayList<int[]> moveHistory;
     
     
     public WildTicTacToePVE(){
@@ -57,6 +58,7 @@ public class WildTicTacToePVE extends JFrame {
         setVisible(true);
         currentPlayer = "Human";
         board = new JButton[3][3];
+        moveHistory = new ArrayList<>();
         hasWinner = false;
         initializeBoard();
         initializeMenuBar();
@@ -136,8 +138,17 @@ public class WildTicTacToePVE extends JFrame {
             }
         });
         
+        JMenuItem undo = new JMenuItem("Undo");
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                undoMove();
+            }
+        });
+        
         menu.add(newGame);
         menu.add(quit);
+        menu.add(undo);
         symbol.add(x);
         symbol.add(o);
         difficulty.add(easy);
@@ -165,6 +176,7 @@ public class WildTicTacToePVE extends JFrame {
                 JButton btn = new JButton();
                 btn.setFont(new Font(Font.SANS_SERIF,Font.BOLD,100));
                 board[i][j] = btn;
+                int[] move = {i, j}; // Store the move coordinates
                 btn.addActionListener(new ActionListener(){
 
                     @Override
@@ -175,10 +187,11 @@ public class WildTicTacToePVE extends JFrame {
                                     JOptionPane.showMessageDialog(null, "Choose a difficulty and symbol first!");
                                 } else {
                                     btn.setText(currentHumanSymbol);
+                                    moveHistory.add(move); // Add the move to the history
                                     if(hasWinner()) {
                                         JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won");
                                         hasWinner = true;   
-                                    } else
+                                    }
                                     if(isBoardFull()){
                                         JOptionPane.showMessageDialog(null, "Draw!");
                                         hasWinner = true;
@@ -188,6 +201,7 @@ public class WildTicTacToePVE extends JFrame {
                             }
                         } else {
                             if(hasWinner == false){
+                                moveHistory.add(move); // Add the move to the history
                                 JButton ai = getAIMove();
                                 ai.setText(currentAISymbol);
                                 if(hasWinner()) {
@@ -504,7 +518,7 @@ public class WildTicTacToePVE extends JFrame {
                     if (board[i][j].getText().equals("")) {
                         board[i][j].setText(currentAISymbol);
                         int score = minimax(copyBoard(board), "Human", depth + 1);
-                        //repeat the method until it finds a winner
+                        //recurse the method until it finds a winner
                         board[i][j].setText(""); // Undo the move
                         bestScore = Math.max(score, bestScore);
                     }
@@ -519,7 +533,7 @@ public class WildTicTacToePVE extends JFrame {
                     if (board[i][j].getText().equals("")) {
                         board[i][j].setText(currentHumanSymbol);
                         int score = minimax(copyBoard(board), "AI", depth + 1);
-                        //repeat the method until it finds a winner
+                        //recurse the method until it finds a winner
                         board[i][j].setText(""); // Undo the move
                         bestScore = Math.min(score, bestScore);
                     }
@@ -539,4 +553,17 @@ public class WildTicTacToePVE extends JFrame {
         }
         return copy;
     }
+    
+    private void undoMove() {
+        if (!moveHistory.isEmpty() && !hasWinner && currentPlayer.equals("AI")) {
+            int[] lastMove = moveHistory.remove(moveHistory.size() - 1);
+            int row = lastMove[0];
+            int col = lastMove[1];
+            board[row][col].setText("");
+            togglePlayer();
+        } else if(currentPlayer.equals("Human")) {
+            JOptionPane.showMessageDialog(null, "Cannot undo AI's move!");
+        }
+    }
+    
 }
