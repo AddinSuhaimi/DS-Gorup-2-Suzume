@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,7 +21,7 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
  *
- * @author Idlan
+ * @author Idlan & Addin
  */
 public class TicTacToeNormalPVE extends JFrame {
     private Container pane;
@@ -39,6 +40,7 @@ public class TicTacToeNormalPVE extends JFrame {
     private JMenuItem hard;
     private int rowCheck;
     private int colCheck;
+    private ArrayList<int[]> moveHistory;
     
     public TicTacToeNormalPVE(){
         super();
@@ -52,6 +54,7 @@ public class TicTacToeNormalPVE extends JFrame {
         currentPlayer = "Human";
         currentSymbol = "x";
         board = new JButton[5][5];
+        moveHistory = new ArrayList<>();
         hasWinner = false;
         initializeBoard();
         initializeMenuBar();
@@ -110,8 +113,17 @@ public class TicTacToeNormalPVE extends JFrame {
             }
         });
         
+        JMenuItem undo = new JMenuItem("Undo");
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                undoMove();
+            }
+        });
+        
         menu.add(newGame);
         menu.add(quit);
+        menu.add(undo);
         difficulty.add(easy);
         difficulty.add(medium);
         difficulty.add(hard);
@@ -127,7 +139,7 @@ public class TicTacToeNormalPVE extends JFrame {
             for(int j = 0; j < 5; j++){
                 board[i][j].setText("");
             }
-    }
+        }
     }
     private void initializeBoard(){
         for (int i = 0; i<5; i++){
@@ -135,6 +147,7 @@ public class TicTacToeNormalPVE extends JFrame {
                 JButton btn = new JButton();
                 btn.setFont(new Font(Font.SANS_SERIF,Font.BOLD,100));
                 board[i][j] = btn;
+                int[] move = {i, j}; // Store the move coordinates
                 btn.addActionListener(new ActionListener(){
                     
                     @Override
@@ -145,6 +158,7 @@ public class TicTacToeNormalPVE extends JFrame {
                                     JOptionPane.showMessageDialog(null, "Please select difficulty first");
                                 } else {
                                     btn.setText(currentSymbol);
+                                    moveHistory.add(move); // Add the move to the history
                                     if(hasWinner()) {
                                         JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won");
                                         hasWinner = true;
@@ -158,6 +172,7 @@ public class TicTacToeNormalPVE extends JFrame {
                             }
                         } else {
                             if(hasWinner == false){
+                                moveHistory.add(move); // Add the move to the history
                                 JButton ai = getAIMove();
                                 ai.setText(currentSymbol);
                                 if(hasWinner()) {
@@ -400,6 +415,18 @@ public class TicTacToeNormalPVE extends JFrame {
         }
 
         return false;
+    }
+    
+    private void undoMove() {
+        if (!moveHistory.isEmpty() && !hasWinner && currentPlayer.equals("AI")) {
+            int[] lastMove = moveHistory.remove(moveHistory.size() - 1);
+            int row = lastMove[0];
+            int col = lastMove[1];
+            board[row][col].setText("");
+            togglePlayer();
+        } else if(currentPlayer.equals("Human")) {
+            JOptionPane.showMessageDialog(null, "Cannot undo AI's move!");
+        }
     }
 }
 
