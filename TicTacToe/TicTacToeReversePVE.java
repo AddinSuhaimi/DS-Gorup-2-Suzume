@@ -21,7 +21,7 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
  *
- * @author Idlan
+ * @author Idlan & Addin
  */
 public class TicTacToeReversePVE extends JFrame {
     private Container pane;
@@ -40,6 +40,7 @@ public class TicTacToeReversePVE extends JFrame {
     private JMenuItem hard;
     private int rowCheck;
     private int colCheck;
+    private ArrayList<int[]> moveHistory;
     
     public TicTacToeReversePVE(){
         super();
@@ -53,6 +54,7 @@ public class TicTacToeReversePVE extends JFrame {
         currentPlayer = "Human";
         currentSymbol = "x";
         board = new JButton[3][3];
+        moveHistory = new ArrayList<>();
         hasWinner = false;
         initializeBoard();
         initializeMenuBar();
@@ -111,8 +113,17 @@ public class TicTacToeReversePVE extends JFrame {
             }
         });
         
+        JMenuItem undo = new JMenuItem("Undo");
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                undoMove();
+            }
+        });
+        
         menu.add(newGame);
         menu.add(quit);
+        menu.add(undo);
         difficulty.add(easy);
         difficulty.add(medium);
         difficulty.add(hard);
@@ -136,6 +147,7 @@ public class TicTacToeReversePVE extends JFrame {
                 JButton btn = new JButton();
                 btn.setFont(new Font(Font.SANS_SERIF,Font.BOLD,100));
                 board[i][j] = btn;
+                int[] move = {i, j}; // Store the move coordinates
                 btn.addActionListener(new ActionListener(){
                     
                     @Override
@@ -145,9 +157,10 @@ public class TicTacToeReversePVE extends JFrame {
                                 if(currentDifficulty == null) {
                                     JOptionPane.showMessageDialog(null, "Please select difficulty first");
                                 } else {
+                                    moveHistory.add(move); // Add the move to the history
                                     btn.setText(currentSymbol);
                                     if(hasWinner()) {
-                                        JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won");
+                                        JOptionPane.showMessageDialog(null, "Player " + (currentPlayer.equals("Human") ? "AI" : "Human") + " has won");
                                         hasWinner = true;
                                     }
                                     else if(isBoardFull()) {
@@ -159,10 +172,11 @@ public class TicTacToeReversePVE extends JFrame {
                             }
                         } else {
                             if(hasWinner == false){
+                                moveHistory.add(move); // Add the move to the history
                                 JButton ai = getAIMove();
                                 ai.setText(currentSymbol);
                                 if(hasWinner()) {
-                                    JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won");
+                                    JOptionPane.showMessageDialog(null, "Player " + (currentPlayer.equals("Human") ? "AI" : "Human") + " has won");
                                     hasWinner = true;   
                                 }
                                 togglePlayer();
@@ -293,7 +307,7 @@ public class TicTacToeReversePVE extends JFrame {
         return makeMediumMove();
     }
     
- //checks if there is a winning move available for a given symbol (X or O)
+    //checks if there is a winning move available for a given symbol (X or O)
     private boolean checkLosingMove(String symbol) {
         // Check rows
         for (int i = 0; i < 3; i++) {
@@ -366,5 +380,17 @@ public class TicTacToeReversePVE extends JFrame {
         }
 
         return false;
+    }
+    
+    private void undoMove() {
+        if (!moveHistory.isEmpty() && !hasWinner && currentPlayer.equals("AI")) {
+            int[] lastMove = moveHistory.remove(moveHistory.size() - 1);
+            int row = lastMove[0];
+            int col = lastMove[1];
+            board[row][col].setText("");
+            togglePlayer();
+        } else if(currentPlayer.equals("Human")) {
+            JOptionPane.showMessageDialog(null, "Cannot undo AI's move!");
+        }
     }
 }
