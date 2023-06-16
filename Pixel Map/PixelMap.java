@@ -202,8 +202,6 @@ public class PixelMap {
         
             int enlargedW = enlargePixelMap(pixelMapImage,20).getWidth();
             int enlargedH = enlargePixelMap(pixelMapImage,20).getHeight();
-            
-            
 
             JFrame frame = new JFrame("Pixel Map Display");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
