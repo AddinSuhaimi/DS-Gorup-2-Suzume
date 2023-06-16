@@ -2,7 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package ds.gorup.pkg2.suzume;
+package pixelmap;
+
 import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
@@ -111,6 +112,7 @@ public class PixelMap {
         int pathCount3 = pixelMap.countPaths3Stations(map3_pixelConverted);
         int pathCount4 = pixelMap.countPaths3Stations(map4_pixelConverted);
 
+        System.out.println("These are the number of possible paths for each map piece that passes through exactly 3 stations");
         System.out.println("Path count for Map 1: " + pathCount1);
         System.out.println("Path count for Map 2: " + pathCount2);
         System.out.println("Path count for Map 3: " + pathCount3);
@@ -153,18 +155,19 @@ public class PixelMap {
         System.out.println(decrypt(17355, 7));
         System.out.println("This should be the number of paths for the full map passing through exactly 4 stations");
         
+        //Form a full map out of the 4 pieces
         CompleteMap fullMap = new CompleteMap();
         System.out.println("\nFull map:");
         printMap(fullMap.getFullMap());
         
         int[][] mapFull_pixelConverted = fullMap.getFullMap();
         int pathCountFull = pixelMap.countPaths4Stations(mapFull_pixelConverted);
-        System.out.println("Path count for full map: " + pathCountFull);
+        System.out.println("Path count for full map that passes through exactly 4 stations: " + pathCountFull);
         
         List<List<String>> shortestPathsMapFull = ShortestPath.FindShortestPaths(mapFull_pixelConverted);
         
-        // Print shortest paths for Map Full
-        System.out.println("\nShortest paths for Map Full:");
+        // Print shortest paths for Full Map
+        System.out.println("\nShortest paths for Full Map that passes through exactly 4 stations:");
         for (List<String> path : shortestPathsMapFull) {
             System.out.println(path);
         }
@@ -176,6 +179,7 @@ public class PixelMap {
             }
         }
 
+        //Create a png file of the full pixel map
         BufferedImage fullPixelMap = new BufferedImage(20, 40, BufferedImage.TYPE_INT_RGB);
 
         for (int y = 0; y < 40; y++) {
@@ -185,7 +189,7 @@ public class PixelMap {
                 fullPixelMap.setRGB(x, y, rgbValue);
             }
         }
-
+        
         File outputFile = new File("pixel_map.png");
         try {
             ImageIO.write(fullPixelMap, "png", outputFile);
@@ -194,15 +198,18 @@ public class PixelMap {
             System.out.println("Failed to save pixel map: " + e.getMessage());
         }
         
+        //Display the full pixel map using JFrame
         try {
             File imageFile = new File("pixel_map.png");
             BufferedImage pixelMapImage = ImageIO.read(imageFile);
             
-            DisplayPixelMap panel = new DisplayPixelMap(enlargePixelMap(pixelMapImage,20));
+            //Enlarge the display
+            DisplayPixelMap panel = new DisplayPixelMap(enlargePixelMap(pixelMapImage,16));
         
-            int enlargedW = enlargePixelMap(pixelMapImage,20).getWidth();
-            int enlargedH = enlargePixelMap(pixelMapImage,20).getHeight();
+            int enlargedW = enlargePixelMap(pixelMapImage,17).getWidth();
+            int enlargedH = enlargePixelMap(pixelMapImage,17).getHeight();
 
+            //Display the map
             JFrame frame = new JFrame("Pixel Map Display");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.getContentPane().add(panel);
@@ -313,6 +320,8 @@ public class PixelMap {
         return enlargedImage;
     }
 }   
+    
+
     
 
     
