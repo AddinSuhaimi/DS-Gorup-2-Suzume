@@ -164,14 +164,16 @@ public class PixelMap {
         int pathCountFull = pixelMap.countPaths4Stations(mapFull_pixelConverted);
         System.out.println("Path count for full map that passes through exactly 4 stations: " + pathCountFull);
         
+        //Find shortest paths for Full Map
         List<List<String>> shortestPathsMapFull = ShortestPath.FindShortestPaths(mapFull_pixelConverted);
         
-        // Print shortest paths for Full Map
+        //Print shortest paths for Full Map
         System.out.println("\nShortest paths for Full Map that passes through exactly 4 stations:");
         for (List<String> path : shortestPathsMapFull) {
             System.out.println(path);
         }
 
+        //Create a png file of the full pixel map
         int[][] mapFull_pixelValues = new int[40][20];
         for (int y = 0; y < 40; y++) {
             for (int x = 0; x < 20; x++) {
@@ -179,7 +181,6 @@ public class PixelMap {
             }
         }
 
-        //Create a png file of the full pixel map
         BufferedImage fullPixelMap = new BufferedImage(20, 40, BufferedImage.TYPE_INT_RGB);
 
         for (int y = 0; y < 40; y++) {
@@ -306,6 +307,7 @@ public class PixelMap {
         return dfs4(Map, 0, 0, 0, visited);
     }
     
+    //Enlarge image method
     public static BufferedImage enlargePixelMap(BufferedImage originalImage, int scale) {
         int originalWidth = originalImage.getWidth();
         int originalHeight = originalImage.getHeight();
@@ -319,8 +321,7 @@ public class PixelMap {
 
         return enlargedImage;
     }
-}   
-    
+}  
 
     
 
