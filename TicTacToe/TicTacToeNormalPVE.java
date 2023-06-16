@@ -46,7 +46,7 @@ public class TicTacToeNormalPVE extends JFrame {
         super();
         pane = getContentPane();
         pane.setLayout(new GridLayout(5,5));
-        setTitle("Tic Tac Toe PVE");
+        setTitle("5x5 Tic Tac Toe PVE");
         setSize(500,500);
         setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -58,6 +58,11 @@ public class TicTacToeNormalPVE extends JFrame {
         hasWinner = false;
         initializeBoard();
         initializeMenuBar();
+        JOptionPane.showMessageDialog(null, "Mode: PVE"
+                + "\nRules:\nHuman starts with 'X' symbol,"
+                + "\nAI plays as 'O' symbol,"
+                + "\nAfter completing your move, click on any button to allow AI to make a move"
+                + "\nFirst to get three 'X' or 'O' in a row wins");
     }
      
     private void initializeMenuBar(){
@@ -429,4 +434,3 @@ public class TicTacToeNormalPVE extends JFrame {
         }
     }
 }
-
