@@ -20,6 +20,7 @@ public class CompleteMap {
         fullMapArray();
     }
     
+    //Input all map piece arrays into one single 40x20 array to form a complete map
     public void fullMapArray(){
 
         for(int i=0;i<20;i++){
