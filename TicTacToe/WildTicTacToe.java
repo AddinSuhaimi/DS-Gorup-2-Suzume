@@ -53,6 +53,9 @@ public class WildTicTacToe extends JFrame {
         moveHistory = new ArrayList<>();
         initializeBoard();
         initializeMenuBar();
+        JOptionPane.showMessageDialog(null, "Mode: PVP"
+                + "\nRules:\nBoth players can freely pick their symbol during their turns"
+                + "\nFirst to get three 'X' or 'O' in a row wins");
     }
      
     private void initializeMenuBar(){
