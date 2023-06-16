@@ -50,7 +50,7 @@ public class TicTacToeNormalEVE extends JFrame {
         super();
         pane = getContentPane();
         pane.setLayout(new GridLayout(5,5));
-        setTitle("5x5 Tic Tac Toe PVE");
+        setTitle("5x5 Tic Tac Toe EVE");
         setSize(500,500);
         setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
