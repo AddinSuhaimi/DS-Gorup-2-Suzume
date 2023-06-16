@@ -39,7 +39,6 @@ public class GamePanel extends JPanel implements Runnable{
    public TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
-    //public CollisionChecker cChecker = new CollisionChecker(this);
     Player player = new Player(this,keyH);
     
     
@@ -94,16 +93,10 @@ public class GamePanel extends JPanel implements Runnable{
         
     }
     public void paintComponent(Graphics g){
-        
         super.paintComponent(g);
-        
         Graphics2D g2 = (Graphics2D)g;
-        
- 
         tileM.draw(g2);
-        
         player.draw(g2);
-        
         g2.dispose();
     }
     
