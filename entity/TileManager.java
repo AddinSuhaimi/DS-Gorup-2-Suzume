@@ -51,14 +51,6 @@ public class TileManager{
        }
    }
    
-   public boolean isCollision(int row, int col) {
-        if (row >= 0 && row < map.length && col >= 0 && col < map[row].length) {
-            int tileType = map[row][col];
-            return tile[tileType].collision;
-        }
-        return false;
-    }
-   
    
    public void draw(Graphics2D g2){
        
