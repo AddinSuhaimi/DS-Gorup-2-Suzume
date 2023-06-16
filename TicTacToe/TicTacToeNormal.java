@@ -36,7 +36,7 @@ public class TicTacToeNormal extends JFrame {
         super();
         pane = getContentPane();
         pane.setLayout(new GridLayout(5,5));
-        setTitle("Tic Tac Toe");
+        setTitle("5x5 Tic Tac Toe PVP");
         setSize(500,500);
         setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -47,6 +47,10 @@ public class TicTacToeNormal extends JFrame {
         hasWinner = false;
         initializeBoard();
         initializeMenuBar();
+        JOptionPane.showMessageDialog(null, "Mode: PVP"
+                + "\nRules:\nPlayer 1 is 'X' symbol"
+                + "\nPlayer 2 is 'O' symbol"
+                + "\nFirst to get three 'X' or 'O' in a row wins");
     }
      
     private void initializeMenuBar(){
