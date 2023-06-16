@@ -8,51 +8,32 @@ import java.util.Arrays;
  */
 public class CompleteMap {
     
-     mapObj map1 = new mapObj("image1");//[10][20]
-     mapObj map2 = new mapObj("image2");
-     mapObj map3 = new mapObj("image3");
-     mapObj map4 = new mapObj("image4");
+     mapObj map1 = new mapObj("image 1");
+     mapObj map2 = new mapObj("image 2");
+     mapObj map3 = new mapObj("image 3");
+     mapObj map4 = new mapObj("image 4");
     
-     int[][] fin = new int[20][20];
+     int[][] fin = new int[40][20];
 
     public CompleteMap() {
         replace();
-        topPart();
-        botPart();
+        fullMapArray();
     }
     
-    public void topPart(){
+    public void fullMapArray(){
 
-        for(int i=0;i<10;i++){
-            
-            
-            int[] firstArray = map1.getarray()[i];        //source array  
-            int[] secondArray = map3.getarray()[i];  //destination array  
-            
-            int fal = firstArray.length;
-            int sal = secondArray.length;   //determines length of secondArray  
-            int[] result = new int[40];  //resultant array of size first array and second array  
-            System.arraycopy(firstArray, 0, result, 0, 20);  
-            System.arraycopy(secondArray, 0, result, 20, 20);  
-            fin[i] = result;
-        }
-    }
-    
-    public void botPart(){
-        for(int i=0;i<10;i++){
-            int[] firstArray = map2.getarray()[i];        //source array  
-            int[] secondArray = map4.getarray()[i];  //destination array  
-            
-            int fal = firstArray.length;
-            int sal = secondArray.length;   //determines length of secondArray  
-            int[] result = new int[40];  //resultant array of size first array and second array  
-            System.arraycopy(firstArray, 0, result, 0, 20);  
-            System.arraycopy(secondArray, 0, result, 20, 20);  
-            fin[i+10] = result;
+        for(int i=0;i<20;i++){
+            for(int j=0;j<10;j++) {
+                fin[i][j] = map1.getarray()[j][i];
+                fin[i][j+10] = map2.getarray()[j][i];
+                fin[i+20][j] = map3.getarray()[j][i];
+                fin[i+20][j+10] = map4.getarray()[j][i];
+            }
+           
         }
     }
 
-    public int[][] getFin() {
+    public int[][] getFullMap() {
         return fin;
     }
     
@@ -60,7 +41,7 @@ public class CompleteMap {
         map1.correction();
         map2.correction();
         map3.correction();
-        
+        //No need to correct 4th map bottom right corner
     }
     
     
