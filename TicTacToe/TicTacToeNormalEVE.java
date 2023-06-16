@@ -298,7 +298,7 @@ public class TicTacToeNormalEVE extends JFrame {
         if(currentDifficulty1.equals("Easy")) {
             return makeEasyMove();
         } else if(currentDifficulty1.equals("Medium")) {
-            return makeMediumMove();
+            return makeMediumMove1();
         } else if(currentDifficulty1.equals("Hard")) {
             return makeHardMove();
         }
@@ -309,7 +309,7 @@ public class TicTacToeNormalEVE extends JFrame {
         if(currentDifficulty2.equals("Easy")) {
             return makeEasyMove();
         } else if(currentDifficulty2.equals("Medium")) {
-            return makeMediumMove();
+            return makeMediumMove2();
         } else if(currentDifficulty2.equals("Hard")) {
             return makeHardMove();
         }
@@ -328,18 +328,25 @@ public class TicTacToeNormalEVE extends JFrame {
         return board[0][0];
     }
     
-    //checks if there is a winning move available for the human player in the "Medium" difficulty
-    //if there is, the AI blocks the human player
-    private JButton makeMediumMove() {
+    //checks if there is a winning move available for the player in the "Medium" difficulty
+    private JButton makeMediumMove1() {
+        if(checkWinningMove("o")) {
+            return board[rowCheck][colCheck];
+        }
+        return makeEasyMove();
+    }
+    
+    //checks if there is a winning move available for the player in the "Medium" difficulty
+    private JButton makeMediumMove2() {
         if(checkWinningMove("x")) {
             return board[rowCheck][colCheck];
         }
         return makeEasyMove();
     }
     
-    //checks if there is a winning move available for both the human player and AI in the "Hard" difficulty
+    //checks if there is a winning move available for both the players in the "Hard" difficulty
     //allows the AI to win if there is an opportunity first 
-    //if no opportunity to win, it tries to block the human player from winning
+    //if no opportunity to win, it tries to block the other player from winning
     private JButton makeHardMove() {
         if(checkWinningMove("o")) {
             return board[rowCheck][colCheck];
