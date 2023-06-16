@@ -37,7 +37,7 @@ public class TicTacToeReverse extends JFrame {
         super();
         pane = getContentPane();
         pane.setLayout(new GridLayout(3,3));
-        setTitle("Tic Tac Toe");
+        setTitle("Tic Tac Toe Reverse PVP");
         setSize(500,500);
         setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -48,6 +48,10 @@ public class TicTacToeReverse extends JFrame {
         hasWinner = false;
         initializeBoard();
         initializeMenuBar();
+        JOptionPane.showMessageDialog(null, "Mode: PVP"
+                + "\nRules:\nPlayer 1 is 'X' symbol"
+                + "\nPlayer 2 is 'O' symbol"
+                + "\nFirst to get three 'X' or 'O' in a row loses");
     }
      
     private void initializeMenuBar(){
