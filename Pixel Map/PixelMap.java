@@ -3,16 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package ds.gorup.pkg2.suzume;
-import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.Random;
-
+import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 import static pixelmap.AnswerDecryption.decrypt;
 
 public class PixelMap {    
@@ -109,10 +106,10 @@ public class PixelMap {
         
         // Calculate and print the path count for each map
         PixelMap pixelMap = new PixelMap();
-        int pathCount1 = pixelMap.countPaths(map1_pixelConverted);
-        int pathCount2 = pixelMap.countPaths(map2_pixelConverted);
-        int pathCount3 = pixelMap.countPaths(map3_pixelConverted);
-        int pathCount4 = pixelMap.countPaths(map4_pixelConverted);
+        int pathCount1 = pixelMap.countPaths3Stations(map1_pixelConverted);
+        int pathCount2 = pixelMap.countPaths3Stations(map2_pixelConverted);
+        int pathCount3 = pixelMap.countPaths3Stations(map3_pixelConverted);
+        int pathCount4 = pixelMap.countPaths3Stations(map4_pixelConverted);
 
         System.out.println("Path count for Map 1: " + pathCount1);
         System.out.println("Path count for Map 2: " + pathCount2);
@@ -154,8 +151,69 @@ public class PixelMap {
         System.out.println();
         System.out.println("Decryption for this weird number 17355: ");
         System.out.println(decrypt(17355, 7));
-
+        System.out.println("This should be the number of paths for the full map passing through exactly 4 stations");
         
+        CompleteMap fullMap = new CompleteMap();
+        System.out.println("\nFull map:");
+        printMap(fullMap.getFullMap());
+        
+        int[][] mapFull_pixelConverted = fullMap.getFullMap();
+        int pathCountFull = pixelMap.countPaths4Stations(mapFull_pixelConverted);
+        System.out.println("Path count for full map: " + pathCountFull);
+        
+        List<List<String>> shortestPathsMapFull = ShortestPath.FindShortestPaths(mapFull_pixelConverted);
+        
+        // Print shortest paths for Map Full
+        System.out.println("\nShortest paths for Map Full:");
+        for (List<String> path : shortestPathsMapFull) {
+            System.out.println(path);
+        }
+
+        int[][] mapFull_pixelValues = new int[40][20];
+        for (int y = 0; y < 40; y++) {
+            for (int x = 0; x < 20; x++) {
+                mapFull_pixelValues[y][x] = (int) Math.round(mapFull_pixelConverted[y][x] * 64);
+            }
+        }
+
+        BufferedImage fullPixelMap = new BufferedImage(20, 40, BufferedImage.TYPE_INT_RGB);
+
+        for (int y = 0; y < 40; y++) {
+            for (int x = 0; x < 20; x++) {
+                int pixelValue = mapFull_pixelValues[y][x];
+                int rgbValue = (pixelValue << 16) | (pixelValue << 8) | pixelValue; // Assuming grayscale values
+                fullPixelMap.setRGB(x, y, rgbValue);
+            }
+        }
+
+        File outputFile = new File("pixel_map.png");
+        try {
+            ImageIO.write(fullPixelMap, "png", outputFile);
+            System.out.println("Pixel map saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Failed to save pixel map: " + e.getMessage());
+        }
+        
+        try {
+            File imageFile = new File("pixel_map.png");
+            BufferedImage pixelMapImage = ImageIO.read(imageFile);
+            
+            DisplayPixelMap panel = new DisplayPixelMap(enlargePixelMap(pixelMapImage,20));
+        
+            int enlargedW = enlargePixelMap(pixelMapImage,20).getWidth();
+            int enlargedH = enlargePixelMap(pixelMapImage,20).getHeight();
+            
+            
+
+            JFrame frame = new JFrame("Pixel Map Display");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().add(panel);
+            frame.setSize(enlargedW, enlargedH);
+            frame.setVisible(true);
+            
+        } catch (IOException e) {
+            System.out.println("Failed to convert image to BufferedImage: " + e.getMessage());
+        }
     }
     
     public static void printMap(int[][] map) {
@@ -171,63 +229,8 @@ public class PixelMap {
     }
 
         
-        //Search for number of possible path
-        public int bfs(int[][] Map) {
-        Queue<int[]> queue = new LinkedList<>();
-        boolean[][] startVisited = new boolean[Map.length][Map[0].length];
-        startVisited[0][0] = true;
-        queue.offer(new int[]{0, 0, 0, 0});
-
-        List<boolean[][]> visitedList = new ArrayList<>();
-        visitedList.add(startVisited);
-
-        int pathCount = 0;
-        while (!queue.isEmpty()) {
-            int[] curr = queue.poll();
-            int currX = curr[0];
-            int currY = curr[1];
-            int visitedStations = curr[2];
-            int visitedIndex = curr[3];
-            boolean[][] currVisited = visitedList.get(visitedIndex);
-
-            if (Map[currY][currX] == 3 && visitedStations == 3) {
-                pathCount++;
-                continue;
-            }
-
-            for (int[] direction : Directions) {
-                int newX = currX + direction[0];
-                int newY = currY + direction[1];
-
-                if (newX < 0 || newX >= Map[0].length || newY < 0 || newY >= Map.length
-                        || Map[newY][newX] == 1 || currVisited[newY][newX])
-                    continue;
-
-                int newVisitedStations = visitedStations;
-                if (Map[newY][newX] == 2 && visitedStations < 3) {
-                    newVisitedStations++;
-                } else if (Map[newY][newX] == 2) {
-                    continue; 
-                }
-
-                if (Map[newY][newX] == 3 && newVisitedStations < 3)
-                    continue;
-
-                boolean[][] newVisited = new boolean[Map.length][Map[0].length];
-                for (int i = 0; i < Map.length; i++) {
-                    System.arraycopy(currVisited[i], 0, newVisited[i], 0, Map[0].length);
-                }
-                newVisited[newY][newX] = true;
-
-                visitedList.add(newVisited);
-                int newVisitedIndex = visitedList.size() - 1;
-                queue.offer(new int[]{newX, newY, newVisitedStations, newVisitedIndex});
-            }
-        }
-        return pathCount;
-    }
-        
-        public int dfs(int[][] MP, int currX, int currY, int visitedStations, boolean[][] visited) {
+    //Search for number of possible path using depth-first-search, passing through exactly 3 stations    
+    public int dfs3(int[][] MP, int currX, int currY, int visitedStations, boolean[][] visited) {
         if (currX < 0 || currX >= MP[0].length || currY < 0 || currY >= MP.length
             || MP[currY][currX] == 1 || visitedStations > 3)
             return 0;
@@ -247,7 +250,7 @@ public class PixelMap {
         for (int[] direction : Directions) {
             int newX = currX + direction[0];
             int newY = currY + direction[1];
-            pathCount += dfs(MP, newX, newY, visitedStations, visited);
+            pathCount += dfs3(MP, newX, newY, visitedStations, visited);
         }
 
         visited[currY][currX] = false;
@@ -257,71 +260,61 @@ public class PixelMap {
         return pathCount;
     }
 
+    //Search for number of possible path using depth-first-search, passing through exactly 4 stations    
+    public int dfs4(int[][] MP, int currX, int currY, int visitedStations, boolean[][] visited) {
+        if (currX < 0 || currX >= MP[0].length || currY < 0 || currY >= MP.length
+            || MP[currY][currX] == 1 || visitedStations > 4)
+            return 0;
 
-    public int countPaths(int[][] Map) {
-        boolean[][] visited = new boolean[Map.length][Map[0].length];
-        return dfs(Map, 0, 0, 0, visited);
+        if (visited[currY][currX])
+            return 0;
+
+        if (MP[currY][currX] == 2)
+            visitedStations++;
+
+        if (visitedStations >= 4 && MP[currY][currX] == 3)
+            return 1;
+
+        visited[currY][currX] = true;
+        int pathCount = 0;
+
+        for (int[] direction : Directions) {
+            int newX = currX + direction[0];
+            int newY = currY + direction[1];
+            pathCount += dfs4(MP, newX, newY, visitedStations, visited);
+        }
+
+        visited[currY][currX] = false;
+
+        if (MP[currY][currX] == 2)
+            visitedStations--;
+        return pathCount;
     }
 
-    //Formation of complete map
-    public int[][] FullMap() {
-        int[][] TempMP1 = new int[20][10], TempMP2 = new int[20][10],
-                TempMP3 = new int[20][10], TempMP4 = new int[20][10];
+    public int countPaths3Stations(int[][] Map) {
+        boolean[][] visited = new boolean[Map.length][Map[0].length];
+        return dfs3(Map, 0, 0, 0, visited);
+    }
+    
+    public int countPaths4Stations(int[][] Map) {
+        boolean[][] visited = new boolean[Map.length][Map[0].length];
+        return dfs4(Map, 0, 0, 0, visited);
+    }
+    
+    public static BufferedImage enlargePixelMap(BufferedImage originalImage, int scale) {
+        int originalWidth = originalImage.getWidth();
+        int originalHeight = originalImage.getHeight();
+        int newWidth = originalWidth * scale;
+        int newHeight = originalHeight * scale;
 
-        for (int i = 0; i < 20; i++){
-            for (int j = 0; j < 10 ; j++){
-                TempMP1[i][j] = Map1[i][j];
-            }
-        }
+        BufferedImage enlargedImage = new BufferedImage(newWidth, newHeight, originalImage.getType());
+        Graphics2D g2d = enlargedImage.createGraphics();
+        g2d.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+        g2d.dispose();
 
-        for (int i = 0; i < 20; i++){
-            for (int j = 0; j < 10 ; j++){
-                TempMP2[i][j] = Map2[i][j];
-            }
-        }
-
-        for (int i = 0; i < 20; i++){
-            for (int j = 0; j < 10 ; j++){
-                TempMP3[i][j] = Map3[i][j];
-            }
-        }
-
-        for (int i = 0; i < 20; i++){
-            for (int j = 0; j < 10 ; j++){
-                TempMP4[i][j] = Map4[i][j];
-            }
-        }
-
-        TempMP1[19][9] = 1;
-        TempMP2[19][9] = 1;
-        TempMP3[19][9] = 1;
-
-        int[][] FullMap = new int[40][20];
-
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 10; j++) {
-                FullMap[i][j] = TempMP1[i][j];
-            }
-        }
-
-        for (int i = 0, y = 0; i < 20; i++, y++) {
-            for (int j = 10, x = 0; j < 20; j++, x++) {
-                FullMap[i][j] = TempMP2[y][x];
-            }
-        }
-
-        for (int i = 20, y = 0; i < 40; i++, y++) {
-            for (int j = 0, x = 0; j < 10; j++, x++) {
-                FullMap[i][j] = TempMP3[y][x];
-            }
-        }
-
-        for (int i = 20, y = 0; i < 40; i++, y++) {
-            for (int j = 10, x = 0; j < 20; j++, x++) {
-                FullMap[i][j] = TempMP4[y][x];
-            }
-        }
-        return FullMap;
+        return enlargedImage;
     }
 }   
+    
+
     
