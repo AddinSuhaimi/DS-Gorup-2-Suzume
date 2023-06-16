@@ -62,6 +62,10 @@ public class WildTicTacToePVE extends JFrame {
         hasWinner = false;
         initializeBoard();
         initializeMenuBar();
+        JOptionPane.showMessageDialog(null, "Mode: PVE"
+                + "\nRules:\nBoth players can freely pick their symbol during their turns"
+                + "\nAfter completing your move, click on any button to allow AI to make a move"
+                + "\nFirst to get three 'X' or 'O' in a row wins");
     }
      
     private void initializeMenuBar(){
