@@ -1,9 +1,16 @@
 package maingame;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import pixelmap.CompleteMap;
+import pixelmap.DisplayPixelMap;
 import pixelmap.PixelMap;
+import static pixelmap.PixelMap.enlargePixelMap;
+import static pixelmap.PixelMap.shortestPathValuesConvert;
 import pixelmap.ShortestPath;
 
 /**
@@ -41,6 +48,62 @@ public class MainGame {
             i++;
         }
         
+        //Create a new map that features the shortest path
+        int[][] mapShort_pixelConverted = fullMap.getFullMap();
+        
+        //Convert the values for the shortest paths pixels into 4
+        shortestPathValuesConvert(mapShort_pixelConverted);
+
+        BufferedImage shortestPixelMap = new BufferedImage(20, 40, BufferedImage.TYPE_INT_RGB);
+
+        for (int y = 0; y < 40; y++) {
+            for (int x = 0; x < 20; x++) {
+                int rgbValue;
+                if(mapShort_pixelConverted[y][x]==0)
+                    rgbValue = 0; // Assuming grayscale values
+                else if(mapShort_pixelConverted[y][x]==1)
+                    rgbValue = 4210752;//Decimal form for RGB(64,64,64)
+                else if(mapShort_pixelConverted[y][x]==2)
+                    rgbValue = 8421504;//Decimal form for RGB(128,128,128)
+                else if(mapShort_pixelConverted[y][x]==3)
+                    rgbValue = 12632256;//Decimal form for RGB(192,192,192)
+                else
+                    rgbValue = 51200;//Decimal form for RGB(0,200,0)
+                shortestPixelMap.setRGB(x, y, rgbValue);
+            }
+        }
+        
+        File outputFileShortest = new File("pixel_map_shortest.png");
+        try {
+            ImageIO.write(shortestPixelMap, "png", outputFileShortest);
+        } catch (IOException e) {
+            System.out.println("Failed to save pixel map: " + e.getMessage());
+        }
+        
+        //Display the shortest path pixel map using JFrame
+        try {
+            File imageFile = new File("pixel_map_shortest.png");
+            BufferedImage pixelMapImage = ImageIO.read(imageFile);
+            
+            //Enlarge the display
+            DisplayPixelMap panel = new DisplayPixelMap(enlargePixelMap(pixelMapImage,16));
+        
+            int enlargedW = enlargePixelMap(pixelMapImage,17).getWidth();
+            int enlargedH = enlargePixelMap(pixelMapImage,17).getHeight();
+
+            //Display the map
+            JFrame frame = new JFrame("Pixel Map Shortest Path Guide");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().add(panel);
+            frame.setSize(enlargedW, enlargedH);
+            frame.setVisible(true);
+            
+        } catch (IOException e) {
+            System.out.println("Failed to convert image to BufferedImage: " + e.getMessage());
+        }
+        
+        System.out.println("Selected Shortest Path: 1");
+        
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
         
@@ -53,5 +116,6 @@ public class MainGame {
         
         
     }
+    
 }
 
