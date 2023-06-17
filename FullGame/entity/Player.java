@@ -76,6 +76,7 @@ public class Player extends Entity{
                 y -= speed;
                 
                 if(map[y/16][x/16]==2) {
+                     gp.playSE(1);
                     initiateRandomTTT();
                     keyH.upPressed=false;
                     Integer[] coordinates = {x,y};
@@ -93,6 +94,7 @@ public class Player extends Entity{
                 y += speed;
 
                 if(map[y/16][x/16]==2) {
+                     gp.playSE(1);
                     initiateRandomTTT();
                     keyH.downPressed=false;
                     Integer[] coordinates = {x,y};
@@ -110,6 +112,7 @@ public class Player extends Entity{
                 x -= speed;
 
                 if(map[y/16][x/16]==2) {
+                     gp.playSE(1);
                     initiateRandomTTT();
                     keyH.leftPressed=false;
                     Integer[] coordinates = {x,y};
@@ -126,6 +129,7 @@ public class Player extends Entity{
                 x += speed;
 
                 if(map[y/16][x/16]==2) {
+                    gp.playSE(1);
                     initiateRandomTTT();
                     keyH.rightPressed=false;
                     Integer[] coordinates = {x,y};
@@ -137,21 +141,25 @@ public class Player extends Entity{
 
         if(winner!=null) {
             if(winner.equals("AI") && visitedStations.size()==1) {
+                gp.playSE(3);
                 System.out.println("You lost at the first station! Your journey ends");
                 System.exit(0);
             } else if(winner.equals("AI") && visitedStations.size()>1) {
+                gp.playSE(3);
                 System.out.println("You lost! Go back to the previous station!");
                 winner = null;
                 visitedStations.pop();
                 x = visitedStations.peek()[0];
                 y = visitedStations.peek()[1];
             } else if(winner.equals("Human")) {
+                gp.playSE(2);
                 System.out.println("You may continue!");
                 winner = null;
             }
         }
 
         if(x==(19*16)&&y==(39*16)) {
+            gp.playSE(2);
             System.out.println("Congratulations! You have won the game!");
             end = true;
         }
