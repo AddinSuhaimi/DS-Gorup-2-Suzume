@@ -277,7 +277,7 @@ public class TicTacToeReversePVE extends JFrame {
         return board[0][0];
     }
     
-    //makes a move for the computer player in the "Easy" difficulty
+    //makes a random move for the AI in the "Medium" difficulty
     private JButton makeMediumMove() {
         Random r = new Random();
         for(int n = 0; n < 1000; n++) {
@@ -288,9 +288,9 @@ public class TicTacToeReversePVE extends JFrame {
         }
         return board[0][0];
     }
-    
-    //checks if there is a winning move available for the human player in the "Medium" difficulty
-    //if there is, the AI blocks the human player
+
+    //checks if there is a losing move available for the AI in the "Easy" difficulty
+    //if there is, the AI will make the losing move
     private JButton makeEasyMove() {
         if(checkLosingMove("o")) {
             return board[rowCheck][colCheck];
@@ -298,9 +298,9 @@ public class TicTacToeReversePVE extends JFrame {
         return makeMediumMove();
     }
     
-    //checks if there is a winning move available for both the human player and AI in the "Hard" difficulty
-    //allows the AI to win if there is an opportunity first 
-    //if no opportunity to win, it tries to block the human player from winning
+    //checks if there is a losing move available for the AI in the "Hard" difficulty
+    //the AI will avoid making the losing move
+    //if no losing move, the AI will make random move
     private JButton makeHardMove() {
         if(checkLosingMove("o")) {
             ArrayList <JButton> availableMoves = getAvailableMoves();
