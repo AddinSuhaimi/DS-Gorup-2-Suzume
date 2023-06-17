@@ -17,6 +17,11 @@ public class MainGame {
         window.setResizable(false);
         window.setTitle("Journey-Simulation");
      
+        //Display Rules
+        System.out.println("MAP JOURNEY SIMULATION RULES:");
+        System.out.println("1. You can only move adjacently (left, right, top, down), strictly not diagonally.\n" +
+                           "2. You are not allowed to walk past the obstacles(trees)\n" +
+                           "3. You are not allowed to walk past the visited ‘pixel’ again in a single journey.\n");
         //Get full map
         PixelMap pixelMap = new PixelMap();
         CompleteMap fullMap = new CompleteMap();
@@ -49,3 +54,4 @@ public class MainGame {
         
     }
 }
+
