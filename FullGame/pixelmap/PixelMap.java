@@ -183,6 +183,7 @@ public class PixelMap {
             for (int x = 0; x < 20; x++) {
                 int pixelValue = mapFull_pixelValues[y][x];
                 int rgbValue = (pixelValue << 16) | (pixelValue << 8) | pixelValue; // Assuming grayscale values
+                System.out.println(rgbValue);
                 fullPixelMap.setRGB(x, y, rgbValue);
             }
         }
@@ -216,6 +217,7 @@ public class PixelMap {
         } catch (IOException e) {
             System.out.println("Failed to convert image to BufferedImage: " + e.getMessage());
         }
+        
     }
     
     public static void printMap(int[][] map) {
@@ -317,5 +319,66 @@ public class PixelMap {
 
         return enlargedImage;
     }
-}   
     
+    public static void shortestPathValuesConvert(int[][] map) {
+        
+        //Selected Shortest Path Route: Number 1
+        
+        //Down 20
+        for(int i=1; i<=20; i++) 
+            map[i][0] = 4;
+        //Right 5
+        for(int j=1; j<=5; j++) 
+            map[20][j] = 4;
+        //Down 3
+        for(int i=21; i<=23; i++) 
+            map[i][5] = 4;
+        //Right 3
+        for(int j=6; j<=8; j++) 
+            map[23][j] = 4;
+        //Down 5
+        for(int i=24; i<=28; i++) 
+            map[i][8] = 4;
+        //Left 1
+        map[28][7] = 4;
+        //Down 2
+        map[29][7] = 4;
+        map[30][7] = 4;
+        //Right 1
+        map[30][8] = 4;
+        //Down 2
+        map[31][8] = 4;
+        map[32][8] = 4;
+        //Right 1
+        map[32][9] = 4;
+        //Down 2
+        map[33][9] = 4;
+        map[34][9] = 4;
+        //Right 1
+        map[34][10] = 4; 
+        //Down 4
+        map[35][10] = 4;
+        map[36][10] = 4;
+        map[37][10] = 4;
+        map[38][10] = 4;
+        //Right 3
+        map[38][11] = 4;
+        map[38][12] = 4;
+        map[38][13] = 4;
+        //Down 1
+        map[39][13] = 4;
+        //Right 2
+        map[39][14] = 4;
+        map[39][15] = 4;
+        //Up 1
+        map[38][15] = 4;
+        //Right 3
+        map[38][16] = 4;
+        map[38][17] = 4;
+        map[38][18] = 4;
+        //Down 1
+        map[39][18] = 4;
+        //Right 1 is destination
+        
+    }
+}
