@@ -1,6 +1,10 @@
 package maingame;
 
+import java.util.List;
 import javax.swing.JFrame;
+import pixelmap.CompleteMap;
+import pixelmap.PixelMap;
+import pixelmap.ShortestPath;
 
 /**
  *
@@ -12,6 +16,25 @@ public class MainGame {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("Journey-Simulation");
+     
+        //Get full map
+        PixelMap pixelMap = new PixelMap();
+        CompleteMap fullMap = new CompleteMap();
+        
+        int[][] mapFull_pixelConverted = fullMap.getFullMap();
+        int pathCountFull = pixelMap.countPaths4Stations(mapFull_pixelConverted);
+        System.out.println("Path count for full map that passes through exactly 4 stations: " + pathCountFull);
+        
+        //Find shortest paths for Full Map
+        List<List<String>> shortestPathsMapFull = ShortestPath.FindShortestPaths(mapFull_pixelConverted);
+        
+        //Print steps for shortest paths for Full Map
+        System.out.println("\nList of shortest paths steps for Full Map that passes through exactly 4 stations:");
+        int i = 1;
+        for (List<String> path : shortestPathsMapFull) {
+            System.out.println(i + ". " + path);
+            i++;
+        }
         
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
@@ -22,6 +45,7 @@ public class MainGame {
         window.setVisible(true);
         
         gamePanel.startGameThread();
+        
         
     }
 }
